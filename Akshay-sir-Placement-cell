@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Akshay Sir Placement Cell — Mail Batch</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root{
+    --paper: #EAF2F6;
+    --paper-raised: #FFFFFF;
+    --ink: #14213D;
+    --ink-soft: #4A6178;
+    --line: #C7DCE6;
+    --stamp: #FF6B35;
+    --stamp-soft: #FFE8DC;
+    --accent2: #2E8B9A;
+    --ok: #2E8B57;
+    --radius: 6px;
+    --font-display: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --paper: #101820;
+      --paper-raised: #182530;
+      --ink: #EAF2F6;
+      --ink-soft: #9DB4C4;
+      --line: #2B3D4A;
+      --stamp: #FF8C5F;
+      --stamp-soft: #3A2A22;
+      --accent2: #5FC1D1;
+      --ok: #5FB585;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper: #101820;
+    --paper-raised: #182530;
+    --ink: #EAF2F6;
+    --ink-soft: #9DB4C4;
+    --line: #2B3D4A;
+    --stamp: #FF8C5F;
+    --stamp-soft: #3A2A22;
+    --accent2: #5FC1D1;
+    --ok: #5FB585;
+  }
+
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    padding: 48px 20px 80px;
+    min-height: 100vh;
+  }
+  .sheet{
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .letterhead{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--accent2);
+    padding-bottom: 20px;
+    margin-bottom: 36px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .letterhead h1{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 30px;
+    margin: 0;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .letterhead h1 span{ color: var(--stamp); }
+  .letterhead .badge{
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent2);
+    padding: 6px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .section{
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent2);
+    border-radius: var(--radius);
+    padding: 20px 20px 22px;
+    margin-bottom: 24px;
+  }
+  .section-head{
+    margin-bottom: 14px;
+  }
+  .section-head .title{
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  input[type="text"], input[type="email"], textarea{
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 11px 13px;
+    font-family: var(--font-ui);
+    font-size: 14.5px;
+    color: var(--ink);
+    resize: vertical;
+    line-height: 1.5;
+  }
+  input:focus, textarea:focus{
+    outline: 2px solid var(--stamp);
+    outline-offset: 1px;
+  }
+  #message{ min-height: 150px; }
+
+  /* recipient boxes */
+  .recipient-rows{
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .recipient-row{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 4px 6px 4px 12px;
+  }
+  .recipient-row .num{
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent2);
+    width: 22px;
+    flex-shrink: 0;
+  }
+  .recipient-row input{
+    border: none;
+    background: transparent;
+    padding: 8px 4px;
+    flex: 1;
+  }
+  .recipient-row input:focus{ outline: none; }
+  .recipient-row.invalid{ border-color: var(--stamp); }
+  .recipient-row .remove{
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 6px 8px;
+    border-radius: var(--radius);
+    flex-shrink: 0;
+  }
+  .recipient-row .remove:hover{ background: var(--stamp-soft); color: var(--stamp); }
+
+  button.add-row{
+    background: var(--accent2);
+    border: none;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    width: 100%;
+  }
+  button.add-row:hover{ opacity: 0.9; }
+
+  .count-row{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .count-row strong{ color: var(--stamp); font-weight: 700; }
+
+  .batchsize input{ width: 80px; }
+
+  button.primary{
+    background: var(--stamp);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px 24px;
+    font-family: var(--font-ui);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+  }
+  button.primary:hover{ opacity: 0.9; }
+  button.primary:active{ transform: translateY(1px); }
+
+  .batches{
+    margin-top: 40px;
+    border-top: 3px solid var(--accent2);
+    padding-top: 28px;
+  }
+  .batches h2{
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 20px;
+    color: var(--ink);
+  }
+  .batch-card{
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--stamp);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .batch-card .info{ flex: 1; min-width: 180px; }
+  .batch-card .label{
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+  .batch-card .detail{
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .batch-actions{ display:flex; gap: 8px; flex-wrap: wrap; }
+  a.open-mail{
+    display:inline-block;
+    background: var(--accent2);
+    color: #fff;
+    text-decoration: none;
+    padding: 9px 16px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  a.open-mail:hover{ opacity: 0.9; }
+  button.copy{
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 9px 14px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--font-ui);
+  }
+  button.copy:hover{ background: var(--stamp-soft); }
+  button.copy.done{ color: var(--ok); border-color: var(--ok); }
+
+  .stamp-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width: 30px; height: 30px;
+    background: var(--stamp-soft);
+    border-radius: var(--radius);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--stamp);
+    flex-shrink: 0;
+  }
+
+  .empty-note{
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  footer{
+    margin-top: 44px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-align: center;
+    padding-top: 18px;
+  }
+  footer strong{ color: var(--accent2); }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <div class="letterhead">
+    <h1>Akshay <span>Sir</span> Placement Cell</h1>
+    <div class="badge">Mail Batch</div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="title">Sender email</div>
+    </div>
+    <input type="email" id="sender" placeholder="you@example.com">
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="title">Recipients</div>
+    </div>
+    <div class="recipient-rows" id="recipient-rows">
+      <div class="recipient-row">
+        <span class="num">1</span>
+        <input type="email" placeholder="name@example.com">
+        <button class="remove" title="Remove">×</button>
+      </div>
+    </div>
+    <button class="add-row" id="add-row">+ Add another recipient</button>
+    <div class="count-row">
+      <span id="count-display"><strong>0</strong> valid addresses</span>
+      <span id="dupe-display"></span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="title">Subject</div>
+    </div>
+    <input type="text" id="subject" placeholder="What's this about?">
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="title">Message</div>
+    </div>
+    <textarea id="message" placeholder="Write the message every recipient will see..."></textarea>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="title">Recipients per batch</div>
+    </div>
+    <div class="batchsize">
+      <input type="text" id="batchsize" value="20" inputmode="numeric">
+    </div>
+  </div>
+
+  <button class="primary" id="generate">Build batches</button>
+
+  <div class="batches" id="batches-wrap" style="display:none;">
+    <h2>Your batches</h2>
+    <div id="batch-list"></div>
+  </div>
+
+  <footer>
+    Made by <strong>Navneet</strong>
+  </footer>
+</div>
+
+<script>
+const rowsWrap = document.getElementById('recipient-rows');
+const addRowBtn = document.getElementById('add-row');
+
+function renumber(){
+  [...rowsWrap.querySelectorAll('.recipient-row')].forEach((row, i) => {
+    row.querySelector('.num').textContent = i + 1;
+  });
+}
+
+function makeRow(){
+  const row = document.createElement('div');
+  row.className = 'recipient-row';
+  row.innerHTML = `
+    <span class="num"></span>
+    <input type="email" placeholder="name@example.com">
+    <button class="remove" title="Remove">×</button>
+  `;
+  row.querySelector('.remove').addEventListener('click', () => {
+    if(rowsWrap.querySelectorAll('.recipient-row').length > 1){
+      row.remove();
+      renumber();
+    } else {
+      row.querySelector('input').value = '';
+    }
+    updateCounts();
+  });
+  row.querySelector('input').addEventListener('input', updateCounts);
+  return row;
+}
+
+addRowBtn.addEventListener('click', () => {
+  rowsWrap.appendChild(makeRow());
+  renumber();
+  rowsWrap.lastElementChild.querySelector('input').focus();
+});
+
+rowsWrap.querySelector('.remove').addEventListener('click', () => {
+  const rows = rowsWrap.querySelectorAll('.recipient-row');
+  if(rows.length > 1){ rows[0].remove(); renumber(); }
+  else { rows[0].querySelector('input').value = ''; }
+  updateCounts();
+});
+rowsWrap.querySelector('input').addEventListener('input', updateCounts);
+
+const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function collectRecipients(){
+  const inputs = [...rowsWrap.querySelectorAll('.recipient-row input')];
+  const valid = [];
+  const seen = new Set();
+  let dupeCount = 0;
+  let filledInvalid = 0;
+
+  inputs.forEach(inp => {
+    const val = inp.value.trim();
+    const row = inp.closest('.recipient-row');
+    row.classList.remove('invalid');
+    if(!val) return;
+    if(!emailRe.test(val)){
+      row.classList.add('invalid');
+      filledInvalid++;
+      return;
+    }
+    const key = val.toLowerCase();
+    if(seen.has(key)){ dupeCount++; return; }
+    seen.add(key);
+    valid.push(val);
+  });
+
+  return {valid, dupeCount, filledInvalid};
+}
+
+function updateCounts(){
+  const {valid, dupeCount, filledInvalid} = collectRecipients();
+  document.getElementById('count-display').innerHTML = `<strong>${valid.length}</strong> valid address${valid.length===1?'':'es'}`;
+  let extra = [];
+  if(dupeCount) extra.push(`${dupeCount} duplicate${dupeCount>1?'s':''} skipped`);
+  if(filledInvalid) extra.push(`${filledInvalid} look invalid`);
+  document.getElementById('dupe-display').textContent = extra.join(' · ');
+}
+
+updateCounts();
+
+document.getElementById('generate').addEventListener('click', () => {
+  const {valid} = collectRecipients();
+  const subject = document.getElementById('subject').value.trim();
+  const message = document.getElementById('message').value;
+  let size = parseInt(document.getElementById('batchsize').value, 10);
+  if(!size || size < 1) size = 20;
+  if(size > 60) size = 60;
+
+  const wrap = document.getElementById('batches-wrap');
+  const list = document.getElementById('batch-list');
+  list.innerHTML = '';
+
+  if(valid.length === 0){
+    wrap.style.display = 'block';
+    list.innerHTML = '<div class="empty-note">Add at least one valid email address above first.</div>';
+    return;
+  }
+
+  const batches = [];
+  for(let i=0; i<valid.length; i += size){
+    batches.push(valid.slice(i, i+size));
+  }
+
+  batches.forEach((batch, idx) => {
+    const bcc = batch.join(',');
+    const mailto = `mailto:?bcc=${encodeURIComponent(bcc)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+
+    const card = document.createElement('div');
+    card.className = 'batch-card';
+    card.innerHTML = `
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="stamp-icon">${idx+1}</div>
+        <div class="info">
+          <div class="label">Batch ${idx+1}</div>
+          <div class="detail">${batch.length} recipient${batch.length>1?'s':''}</div>
+        </div>
+      </div>
+      <div class="batch-actions">
+        <button class="copy" data-bcc="${encodeURIComponent(bcc)}">Copy addresses</button>
+        <a class="open-mail" href="${mailto}">Open in mail app</a>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+
+  wrap.style.display = 'block';
+
+  list.querySelectorAll('button.copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = decodeURIComponent(btn.getAttribute('data-bcc')).replace(/,/g, ', ');
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.textContent;
+        btn.textContent = 'Copied';
+        btn.classList.add('done');
+        setTimeout(() => { btn.textContent = original; btn.classList.remove('done'); }, 1500);
+      }).catch(() => {});
+    });
+  });
+});
+</script>
+
+</body>
+</html>
